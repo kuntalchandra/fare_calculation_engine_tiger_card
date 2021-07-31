@@ -1,0 +1,8 @@
+.idea
+*.pyc
+__pycache__
+logs
+venv
+build/
+tiger_card.egg-info
+dist/
