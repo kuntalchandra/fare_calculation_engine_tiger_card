@@ -1,8 +1,7 @@
-import sys
 from os import getcwd
 from unittest import TestCase
 from tiger_card.services.commute_compute import CommuteComputeService
-from cli import process_file
+from tiger_card.cli import process_file
 
 
 class TigerCardFileInputTest(TestCase):

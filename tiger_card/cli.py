@@ -17,7 +17,6 @@ def tiger_card(input_file: str) -> None:
         process_file(commute_compute_service, input_file)
     else:
         process_input(commute_compute_service)
-    process_file(commute_compute_service, input_file)
 
 
 def process_file(compute_commute_service: CommuteComputeService, input_file: str) -> List[int]:

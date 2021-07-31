@@ -6,7 +6,7 @@
 run `$ bin/setup` *Includes E2E test*
 
 ## Interactive execution
-run `$ bin/tiger_card` [TBD, future scope]
+run `$ bin/tiger_card` [Not implemented, future scope]
 
 ## Service Tests
 TBD
