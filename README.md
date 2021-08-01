@@ -2,6 +2,9 @@
 ## Problem Statement
 *Refer to the functional spec*
 
+## Virtual environment
+`$ source venv/bin/activate`
+
 ## Install
 run `$ bin/setup` *Includes E2E test*
 
