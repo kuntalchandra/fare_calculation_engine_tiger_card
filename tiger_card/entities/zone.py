@@ -1,9 +1,9 @@
 from typing import List
-
 from tiger_card.entities.ticket_cost import TicketCost
+from tiger_card.entities.zones import Zones
 
 
-class Zone:
+class Zone(Zones):
     def __init__(self, zone_id: int):
         self._id = zone_id
         self._cost = None
