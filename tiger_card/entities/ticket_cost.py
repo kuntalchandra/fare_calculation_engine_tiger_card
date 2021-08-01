@@ -1,4 +1,7 @@
-class TicketCost:
+from tiger_card.entities.costs import Costs
+
+
+class TicketCost(Costs):
     def __init__(self, peak_hour_cost: int, off_peak_hour_cost: int):
         self._peak_hour_cost = peak_hour_cost
         self._off_peak_hour_cost = off_peak_hour_cost
