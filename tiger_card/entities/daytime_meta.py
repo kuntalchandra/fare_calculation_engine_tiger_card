@@ -40,4 +40,4 @@ class Weekend:
 
     @staticmethod
     def get_evening_off_peak_hours():
-        return [time(hour=22, minute=1), time(hour=10, minute=59)]
+        return [time(hour=22, minute=1), time(hour=8, minute=59)]

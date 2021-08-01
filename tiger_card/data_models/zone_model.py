@@ -1,5 +1,6 @@
 from tiger_card.entities.ticket_cost import TicketCost
 from tiger_card.entities.zone import Zone
+from tiger_card.data_models.singleton import Singleton
 
 """
 zones = [1, 2]
@@ -11,9 +12,13 @@ neighbors_cap = {1: [120, 600], 2: [120, 600]}
 """
 
 
-class ZoneBuilder:
-    @staticmethod
-    def builder():
+@Singleton
+class ZoneModel:
+    def __init__(self):
+        self.zones = []
+        self.zone_map = {}
+
+    def builder(self):
         # zone 1
         zone_one = Zone(1)
         zone_one.cost = TicketCost(peak_hour_cost=30, off_peak_hour_cost=25)
@@ -36,3 +41,25 @@ class ZoneBuilder:
         zone_two_neighbor.daily_cap = 120
         zone_two_neighbor.weekly_cap = 600
         zone_two.neighbors = [zone_two_neighbor]
+
+        self.zones.extend([zone_one, zone_two])
+
+    def zones_map(self):
+        self.builder()
+        for zone in self.zones:
+            self.zone_map[str(zone.id)] = {
+                "peak_hour_cost": zone.cost.peak_hour_cost,
+                "off_peak_hour_cost": zone.cost.off_peak_hour_cost,
+                "daily_cap": zone.daily_cap,
+                "weekly_cap": zone.weekly_cap
+            }
+            neighbors = {}
+            for neighbor in zone.neighbors:
+                neighbors[str(neighbor.id)] = {
+                    "peak_hour_cost": neighbor.cost.peak_hour_cost,
+                    "off_peak_hour_cost": neighbor.cost.off_peak_hour_cost,
+                    "daily_cap": neighbor.daily_cap,
+                    "weekly_cap": neighbor.weekly_cap
+                }
+            self.zone_map[str(zone.id)]["neighbors"] = neighbors
+        return self.zone_map
