@@ -8,8 +8,8 @@ run `$ bin/setup` *Includes E2E test*
 ## Interactive execution
 run `$ bin/tiger_card` [Not implemented, future scope]
 
-## Service Tests
-TBD
+## Data model tests
+run `$ nosetests tiger_card/data_models/tests/zone_model_test.py -v`
 
-## E2E Tests
+## E2E tests
 run `$ nosetests tests/tiger_card_file_input_test.py -v`
