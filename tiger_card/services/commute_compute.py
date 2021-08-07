@@ -3,8 +3,9 @@ from datetime import time
 from typing import Dict
 from tiger_card.data_models.commute_daytime_model import CommuteDayTimeModel
 from tiger_card.data_models.zone_model import ZoneModel
-from tiger_card.services.cap_compute import CapComputeService
+from tiger_card.services.daily_cap_compute import DailyCapComputeService
 from tiger_card.services.service_exceptions import InvalidZoneException, InvalidDayException, InvalidTimeException
+from tiger_card.services.weekly_cap_compute import WeeklyCapComputeService
 
 
 class CommuteComputeService:
@@ -32,10 +33,12 @@ class CommuteComputeService:
         self.travelling_metadata[commute_day].append([from_zone, to_zone])  # queue the travelling history
         fare = self.calculate_cost(commuting_time, commute_day, zone_data)  # fare for this trip
         # finalise the applicable caps
-        fare = CapComputeService.apply_daily_cap(spent=self.costs, commuting_day=commute_day, fare=fare,
-                                                 travel_history=self.travelling_metadata, zones_data=self.zones_map)
-        fare = CapComputeService.apply_weekly_cap(spent=self.costs, fare=fare, travel_history=self.travelling_metadata,
-                                                  zones_data=self.zones_map)
+        fare = DailyCapComputeService.apply_daily_cap(spent=self.costs, commuting_day=commute_day, fare=fare,
+                                                      travel_history=self.travelling_metadata,
+                                                      zones_data=self.zones_map)
+        fare = WeeklyCapComputeService.apply_weekly_cap(spent=self.costs, fare=fare,
+                                                        travel_history=self.travelling_metadata,
+                                                        zones_data=self.zones_map)
         self.costs[commute_day] += fare
         return fare
 
