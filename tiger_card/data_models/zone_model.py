@@ -1,4 +1,6 @@
+from tiger_card.entities.daily_cap import DailyCap
 from tiger_card.entities.ticket_cost import TicketCost
+from tiger_card.entities.weekly_cap import WeeklyCap
 from tiger_card.entities.zone import Zone
 from tiger_card.data_models.singleton import Singleton
 
@@ -20,26 +22,26 @@ class ZoneModel:
 
     def builder(self):
         # zone 1
-        zone_one = Zone(1)
+        zone_one = Zone(zone_id=1)
         zone_one.cost = TicketCost(peak_hour_cost=30, off_peak_hour_cost=25)
-        zone_one.daily_cap = 100
-        zone_one.weekly_cap = 500
+        zone_one.daily_cap = DailyCap(cap=100)
+        zone_one.weekly_cap = WeeklyCap(cap=500)
         # direction - zone one to its neighbor
-        zone_one_neighbor = Zone(2)
+        zone_one_neighbor = Zone(zone_id=2)
         zone_one_neighbor.cost = TicketCost(peak_hour_cost=35, off_peak_hour_cost=30)
-        zone_one_neighbor.daily_cap = 120
-        zone_one_neighbor.weekly_cap = 600
+        zone_one_neighbor.daily_cap = DailyCap(cap=120)
+        zone_one_neighbor.weekly_cap = WeeklyCap(cap=600)
         zone_one.neighbors = [zone_one_neighbor]
 
         # zone 2
-        zone_two = Zone(2)
+        zone_two = Zone(zone_id=2)
         zone_two.cost = TicketCost(peak_hour_cost=25, off_peak_hour_cost=20)
-        zone_two.daily_cap = 80
-        zone_two.weekly_cap = 400
-        zone_two_neighbor = Zone(1)
+        zone_two.daily_cap = DailyCap(cap=80)
+        zone_two.weekly_cap = WeeklyCap(cap=400)
+        zone_two_neighbor = Zone(zone_id=1)
         zone_two_neighbor.cost = TicketCost(peak_hour_cost=35, off_peak_hour_cost=30)
-        zone_two_neighbor.daily_cap = 120
-        zone_two_neighbor.weekly_cap = 600
+        zone_two_neighbor.daily_cap = DailyCap(cap=120)
+        zone_two_neighbor.weekly_cap = WeeklyCap(cap=600)
         zone_two.neighbors = [zone_two_neighbor]
 
         self.zones.extend([zone_one, zone_two])
@@ -50,16 +52,16 @@ class ZoneModel:
             self.zone_map[str(zone.id)] = {
                 "peak_hour_cost": zone.cost.peak_hour_cost,
                 "off_peak_hour_cost": zone.cost.off_peak_hour_cost,
-                "daily_cap": zone.daily_cap,
-                "weekly_cap": zone.weekly_cap
+                "daily_cap": zone.daily_cap.cap,
+                "weekly_cap": zone.weekly_cap.cap
             }
             neighbors = {}
             for neighbor in zone.neighbors:
                 neighbors[str(neighbor.id)] = {
                     "peak_hour_cost": neighbor.cost.peak_hour_cost,
                     "off_peak_hour_cost": neighbor.cost.off_peak_hour_cost,
-                    "daily_cap": neighbor.daily_cap,
-                    "weekly_cap": neighbor.weekly_cap
+                    "daily_cap": neighbor.daily_cap.cap,
+                    "weekly_cap": neighbor.weekly_cap.cap
                 }
             self.zone_map[str(zone.id)]["neighbors"] = neighbors
         return self.zone_map
