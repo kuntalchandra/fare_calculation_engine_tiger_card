@@ -22,7 +22,7 @@ class DailyCapComputeService:
     @staticmethod
     def apply_daily_cap(spent: Dict[str, int], commuting_day: str, fare: int, travel_history: Dict[str, deque],
                         zones_data: Dict[str, Any]) -> int:
-        if spent[commuting_day] == 0:  # didn't travel earlier today
+        if commuting_day not in spent or spent[commuting_day] == 0:  # didn't travel earlier today
             return fare
         total_spent = spent[commuting_day]
         daily_cap = DailyCapComputeService.compute_daily_cap(travel_history, zones_data)
