@@ -4,19 +4,17 @@ from typing import Dict, Any
 
 
 class DailyCapComputeService:
+    # TODO: DRY- cross zone checking in Daily and Weekly cap
     @staticmethod
-    def compute_daily_cap(travel_history: Dict[str, deque], zones_data: Dict[str, Any]) -> int:
+    def compute_daily_cap(travel_history: deque, zones_data: Dict[str, Any]) -> int:
         travel_data = deepcopy(travel_history)
-        daily_cap = float("inf")
-        for commute_day in travel_data:
-            travel_q = travel_data[commute_day]
-            while travel_q:
-                from_zone, to_zone = travel_q.popleft()
-                if from_zone == to_zone:  # same zone
-                    daily_cap = zones_data[from_zone]["daily_cap"]
-                else:  # cross zone travel, higher preference
-                    neighbors = zones_data[from_zone]["neighbors"]
-                    return neighbors[to_zone]["daily_cap"]
+        while travel_data:
+            from_zone, to_zone = travel_data.popleft()
+            if from_zone == to_zone:  # same zone
+                daily_cap = zones_data[from_zone]["daily_cap"]
+            else:  # cross zone travel, higher preference
+                neighbors = zones_data[from_zone]["neighbors"]
+                return neighbors[to_zone]["daily_cap"]
         return daily_cap
 
     @staticmethod
@@ -25,7 +23,7 @@ class DailyCapComputeService:
         if commuting_day not in spent or spent[commuting_day] == 0:  # didn't travel earlier today
             return fare
         total_spent = spent[commuting_day]
-        daily_cap = DailyCapComputeService.compute_daily_cap(travel_history, zones_data)
+        daily_cap = DailyCapComputeService.compute_daily_cap(travel_history[commuting_day], zones_data)
         if total_spent + fare > daily_cap:  # exceeded daily cap
             return daily_cap - total_spent
         return fare

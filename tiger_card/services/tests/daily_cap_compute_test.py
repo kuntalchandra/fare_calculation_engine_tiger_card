@@ -21,3 +21,9 @@ class DailyCapComputeServiceTest(TestCase):
                                                                    commuting_day=self.commuting_day,
                                                                    fare=self.default_fare, travel_history={
                 self.commuting_day: deque([["1", "2"]])}, zones_data=self.zones_map))
+
+    def test_daily_cap_applicable_different_days(self):
+        self.assertEqual(0, DailyCapComputeService.apply_daily_cap(spent={"Monday": 120, "Tuesday": 100},
+                                                                   commuting_day="Tuesday",
+                                                                   fare=self.default_fare, travel_history={
+                "Monday": deque([["1", "2"]]), "Tuesday": deque([["1", "1"]])}, zones_data=self.zones_map))
