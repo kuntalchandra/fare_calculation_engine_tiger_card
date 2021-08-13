@@ -4,6 +4,7 @@ from typing import Dict, Any
 
 
 class WeeklyCapComputeService:
+    # TODO: DRY- cross zone checking in Daily and Weekly cap
     @staticmethod
     def compute_weekly_cap(travel_history: Dict[str, deque], zones_data: Dict[str, Any]) -> int:
         travel_data = deepcopy(travel_history)

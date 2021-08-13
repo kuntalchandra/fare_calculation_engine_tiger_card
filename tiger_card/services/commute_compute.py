@@ -4,6 +4,7 @@ from typing import Dict
 from tiger_card.data_models.commute_daytime_model import CommuteDayTimeModel
 from tiger_card.data_models.zone_model import ZoneModel
 from tiger_card.services.daily_cap_compute import DailyCapComputeService
+from tiger_card.services.helper.zone_identifier import ZoneIdentifier
 from tiger_card.services.service_exceptions import InvalidZoneException, InvalidDayException, InvalidTimeException
 from tiger_card.services.weekly_cap_compute import WeeklyCapComputeService
 
@@ -20,16 +21,7 @@ class CommuteComputeService:
         hour, minute = commute_time.split(":")
         commuting_time = time(hour=int(hour), minute=int(minute))
 
-        # find out applicable fare based on same zone travel or cross zone travel
-        if from_zone == to_zone:  # same zone
-            zone_data = self.zones_map[from_zone]
-        else:  # cross zone
-            neighbors = self.zones_map[from_zone]["neighbors"]
-            try:
-                zone_data = neighbors[to_zone]
-            except Exception:
-                raise InvalidZoneException("Destination zone is not reachable from {} zone".format(from_zone))
-
+        zone_data = ZoneIdentifier.distinguish_zone_data(zones_map=self.zones_map, from_zone=from_zone, to_zone=to_zone)
         self.travelling_metadata[commute_day].append([from_zone, to_zone])  # queue the travelling history
         fare = self.calculate_cost(commuting_time, commute_day, zone_data)  # fare for this trip
         # finalise the applicable caps
